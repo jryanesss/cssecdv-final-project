@@ -101,6 +101,9 @@ loginButton?.addEventListener( "click", async function(e) {
 
         // - On success, go to dashboard
         if( response.status == 201 ) {
+            const data = await response.json();
+            alert("Your last login was at " + data.lastLogin + "!" );
+
             window.location.href = "/homepage";
         } else if( response.status == 200 ) {
             window.location.href = "/admin";

@@ -98,8 +98,6 @@ const UserController = {
             const {userID} = await User.getUserID(email);
             const {highestRole} = await User.getHighestRole(email);
 
-            console.log( "login", login );
-
             req.session.rememberMe = rememberMe === 'true';
             req.session.authorized = true;
             req.session.email = email;
@@ -110,9 +108,9 @@ const UserController = {
             const username = req.session.username;
 
             if( req.session.userRole == 'admin' ) {
-                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username });
+                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username , lastLogin: login.lastLogin });
             } else {
-                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username });
+                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username, lastLogin: login.lastLogin });
             }   
         } catch( error ) {
             console.error(error); 

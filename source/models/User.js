@@ -28,7 +28,10 @@ class User {
             const passwordMatch = await bcrypt.compare( password, user.password );
 
             if( passwordMatch ) {
-                return { status: 200, message: "Login successful.", username: user.username };
+                const sql = 'UPDATE users SET lastLogin = CURRENT_TIMESTAMP WHERE userId = ?';
+                await db.execute(sql, [user.userID]);
+                
+                return { status: 200, message: "Login successful.", username: user.username , lastLogin: user.lastLogin};                
             } else {
                 return { status: 401, message: "Incorrect password.", username: user.username };
             }
