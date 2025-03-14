@@ -28,11 +28,29 @@ class User {
             const passwordMatch = await bcrypt.compare( password, user.password );
 
             if( passwordMatch ) {
-                const sql = 'UPDATE users SET lastLogin = CURRENT_TIMESTAMP WHERE userId = ?';
-                await db.execute(sql, [user.userID]);
+                if (user.lockedTill == null) {
+                    const sql = 'UPDATE users SET lastLogin = CURRENT_TIMESTAMP WHERE userId = ?';
+                    await db.execute(sql, [user.userID]);
+                }
+                else if (user.lockedTill < new Date().getTime()) {
+                    const sql = 'UPDATE users SET lastLogin = CURRENT_TIMESTAMP, lockedTill = NULL WHERE userId = ?';
+                    await db.execute(sql, [user.userID]);
+                }
+                else {
+                    return { status: 402, message: "Account is locked", username: user.username}
+                }
                 
                 return { status: 200, message: "Login successful.", username: user.username , lastLogin: user.lastLogin};                
             } else {
+                if ( user.failedAttempts >= 4 ) {
+                    const sql = 'UPDATE users SET lockedTill = DATE_ADD(NOW(), INTERVAL 5 MINUTE), failedAttempts = 0 WHERE userId = ?';
+                    await db.execute(sql, [user.userID]);
+                }
+                else {
+                    const sql = 'UPDATE users SET failedAttempts = failedAttempts + 1 WHERE userId = ?';
+                    await db.execute(sql, [user.userID]);
+                }
+                
                 return { status: 401, message: "Incorrect password.", username: user.username };
             }
         } catch( error ) {

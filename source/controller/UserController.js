@@ -90,9 +90,12 @@ const UserController = {
             const { email, password, rememberMe } = req.body;
             const login = await User.login( email, password );
 
-            if( login.status !== 200 ) {
+            if( login.status == 401 || login.status == 404) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             } 
+            else if ( login.status == 402 ) {
+                return res.status(402).json({ message: "Account is locked" })
+            }
 
             // - Perform queries
             const {userID} = await User.getUserID(email);

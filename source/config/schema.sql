@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    lastLogin TIMESTAMP
+    lastLogin TIMESTAMP,
+    failedAttempts INT DEFAULT 0,
+    lockedTill TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS old_passwords (

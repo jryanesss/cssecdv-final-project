@@ -114,6 +114,9 @@ loginButton?.addEventListener( "click", async function(e) {
                 case 401: {
                     errorBox.textContent = 'Invalid credentials';
                 } break;
+                case 402: {
+                    errorBox.textContent = 'Account is locked';
+                } break;
                 default: {
                     errorBox.textContent = 'Internal server error';
                 }
