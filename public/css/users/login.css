@@ -76,6 +76,12 @@ div.input-box input {
     margin: 10px 0;
 }
 
+.invalid {
+    border: 1px solid #80354a;
+    background-color: #faccd9;
+    color: #80354a;
+}
+
 .password-toggle {
     cursor: pointer;
     margin-right: 10px;
@@ -141,6 +147,13 @@ div.terms-container {
 ***********************************************/
 #register-form-container {
     display: none;
+}
+
+#password-policy {
+    border: 1px solid #EF91CF;
+    text-align: center;
+    padding: 10px;
+    margin: 5px;
 }
 
 .input-box.name {

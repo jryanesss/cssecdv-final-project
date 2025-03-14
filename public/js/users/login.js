@@ -44,12 +44,22 @@ const loginPassword = document.getElementById("login-password");
 const loginButton = document.getElementById("login-button");
 const rememberBox = document.getElementById("remember-me");
 
+let emailReg =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 rememberBox.addEventListener('change', function() {
     if( this.checked ) {
         this.value = true;
     } else {
         this.value = false;
     }   
+});
+
+loginEmail.addEventListener('input', function() {
+       if (emailReg.test(loginEmail.value)) {
+        loginEmail.classList.remove('invalid');
+    } else {
+        loginEmail.classList.add('invalid');
+    }
 });
 
 function togglePasswordVisibility( id ) {
@@ -90,6 +100,12 @@ loginButton?.addEventListener( "click", async function(e) {
         if( !areInputFieldsFilled('login-form-container') ) {
             errorBox.style.display = 'block';
             errorBox.textContent = 'Missing email or password';
+            return false;
+        }
+        
+        if( loginEmail.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Email';
             return false;
         }
 
@@ -141,6 +157,52 @@ const registerEmail = document.getElementById("register-email");
 const registerPassword = document.getElementById("register-password");
 const registerButton = document.getElementById("register-button");
 
+let alphaNumericReg = /^\w+$/;
+let alphabeticReg = /^[A-Za-z]+$/;
+let passwordReg = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+registerFirstName.addEventListener('input', function() {
+    if (alphabeticReg.test(registerFirstName.value)) {
+        registerFirstName.classList.remove('invalid');
+    } else {
+        registerFirstName.classList.add('invalid');
+    }
+});
+
+registerLastName.addEventListener('input', function() {
+    if (alphabeticReg.test(registerLastName.value)) {
+        registerLastName.classList.remove('invalid');
+    } else {
+        registerLastName.classList.add('invalid');
+    }
+});
+
+registerUsername.addEventListener('input', function() {
+    if (alphaNumericReg.test(registerUsername.value)) {
+        registerUsername.classList.remove('invalid');
+    } else {
+        registerUsername.classList.add('invalid');
+    }
+});
+
+registerEmail.addEventListener('input', function() {
+    if (emailReg.test(registerEmail.value)) {
+        registerEmail.classList.remove('invalid');
+    } else {
+        registerEmail.classList.add('invalid');
+    }
+});
+
+registerPassword.addEventListener('input', function() {
+    const pass = registerPassword.value;
+    if (passwordReg.test(pass)) {
+        registerPassword.classList.remove('invalid');
+    } else {
+        registerPassword.classList.add('invalid');
+    }
+});
+
+
 /** 
     ` Attaches a `click` event to `#register-button`. The code communicates
     asynchronously with the server to register a new student to the database.
@@ -169,6 +231,32 @@ registerButton?.addEventListener( "click", async function(e) {
         if( !areInputFieldsFilled("register-form-container") ) {
             errorBox.style.display = 'block';
             errorBox.textContent = 'Some input fields are missing';
+            return false;
+        }
+
+        if( registerFirstName.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'First Name Must Be Letters Only';
+            return false;
+        }
+        if( registerLastName.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Last Name Must Be Letters Only';
+            return false;
+        }
+        if( registerUsername.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Username Must Be Alphanumeric';
+            return false;
+        }
+        if( registerEmail.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Email';
+            return false;
+        }
+        if( registerPassword.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Password';
             return false;
         }
 
